@@ -1,73 +1,106 @@
-# The .agent Protocol Specification (Draft)
+# The `.agent` Specification 
 
-## 1. Overview
-The **.agent** protocol is an open specification for the encapsulation, distribution, and execution of Artificial Intelligence agents. Unlike isolated scripts or proprietary APIs, the `.agent` format proposes an agnostic exchange standard for hardware and operating systems, enabling intelligence to be portable, secure, and interoperable.
+[Technical Overview](../technical-overview.md)
 
-The goal is to allow an agent created for a smartphone to have its logic interpreted or transpiled to run on a smart microwave, a compliance server, or an automotive system.
+## 1. Executive Summary
 
-## 2. Core Conceptual Pillars
+The **.agent** specification is a human-centric standard designed to transform unpredictable AI interactions into reliable, goal-oriented tools. It bridges the gap between human intent and machine execution by focusing on **achieving specific results and fulfilling user objectives.**
 
-### 2.1 Portability: "Build Once, Run Anywhere"
-The `.agent` file is a structured package (ZIP) containing metadata, declarations of intent, and execution logic. It does not rely on a specific language runtime (like Python or Node.js) installed on the host, but rather on capabilities provided by the device's **Agent Engine**.
+By separating **Reasoning (Intelligence)** from **Rules (Governance)**, the specification provides a language-agnostic framework for portable, interoperable, and secure agents. It enables AI to run consistently across diverse environments—from wearables and edge devices to enterprise mainframes.
 
-### 2.2 Execution Duality: .flow and .logic
-To balance accessibility and performance, the protocol separates execution into two layers:
-* **`.flow` (Declarative/Interpreted):** Human-readable files (YAML/JSON) describing state graphs, decision flows, and prompts. This is the ideal layer for "No-Code" creators and for LLMs to understand the agent's strategy before executing it.
-* **`.logic` (Pre-compiled/Optimized):** Binaries in intermediate languages (preferably **WebAssembly - WASM**). This layer is intended for heavy logic, mathematical processing, regulatory compliance, or proprietary algorithms requiring native performance and code protection.
+## 2. Motivation: Solving AI Fragmentation
 
-### 2.3 Progressive Disclosure
-The protocol supports dynamic loading of abilities. An `.agent` file can contain multiple "skills" that are only activated or loaded into memory by the Engine when the flow (`.flow`) or logic (`.logic`) requests them. This allows complex agents to run on resource-constrained devices.
+Current AI implementation mirrors the "Browser Wars" era. Developers face a fragmented landscape where every vendor requires different prompt dialects and governance structures.
 
-## 3. Model Orchestration and Self-Awareness
-To optimize cost, latency, and privacy, the protocol introduces the **Compute Effort** metadata layer. This allows the local Runtime to autonomously decide (or based on user preferences) where each task should be processed.
+### 2.1 Key Challenges
 
-### 3.1 Effort Scoring
-Each skill or task within the `.agent` can declare the required level of reasoning:
-* **`effort: low` (Micro-models/Local):** Tasks like short summaries, text classification, or entity extraction. Ideal for on-device models (e.g., Llama-3B, Gemini Nano).
-* **`effort: medium` (Mid-tier Models):** Complex drafting, technical reviews, or translation.
-* **`effort: high` (Frontier Models/Deep Thinking):** Compliance analysis, complex code generation, or advanced logical reasoning. Requires models like Claude 3.5 Sonnet, GPT-4o, or Gemini 2.0 Pro.
+* **Technical Debt:** Engineers must maintain custom logic for every different AI model (OpenAI, Google, Meta, etc.).  
+* **Financial Risk:** Without intent declaration, systems may inadvertently route trivial tasks to high-cost frontier models, leading to unnecessary expenses.  
+* **Integration Barriers:** Connecting modern AI to legacy systems and diverse hardware ecosystems often requires non-standardized, custom-built bridges, making multi-stage workflows difficult to maintain.
 
-### 3.2 Sub-Agent Decomposition
-The protocol allows a main agent (Orchestrator) to instantiate temporary "Worker Agents" from internal skills or external `.agent` files. The Runtime manages communication and context sharing between these sub-agents in an isolated and secure manner.
+### 2.2 The Solution: Standardized Contracts
 
-## 4. The Capability Contract (The Operational Triad)
-Interoperability is guaranteed by the explicit declaration of three vectors in the agent manifest:
-1.  **Consume (Inputs and Permissions):** What the agent requests from the environment (e.g., `std.contacts`, `std.location`, `fin.bank_statements`).
-2.  **Do (Capabilities and Processing):** What the agent can do or requires from the engine (e.g., `ai.vision.ocr`, `math.statistics`, `cooking.timer`).
-3.  **Output (Results and Formats):** What the agent delivers at the end of the cycle (e.g., `ui.html_render`, `file.pdf`, `iot.oven.start`).
+The specification introduces a **Standardized Contract**. By declaring required capabilities and effort levels upfront, the system enables **Smart Routing**: choosing the right model (local or cloud) based on task complexity, ensuring efficiency and cost control.
 
-## 5. Security and Privacy by Design
-The model follows the principle of **Declarative Privacy**:
-* The device engine acts as a **sandbox**.
-* Access to sensitive data is mediated by the OS based on `consume` directives.
-* Isolation via **WASI** (WebAssembly System Interface) ensures an agent cannot access host resources (like the file system) that haven't been explicitly mapped.
+## 3. Core Pillars: The Duality of Execution
 
-## 6. Modular and Expandable Ecosystem
-Inspired by standards like **JSON-LD** and **Matter**, the protocol uses a namespace-based capability dictionary:
-* **`std.*`:** Universal capabilities maintained by the core spec.
-* **`com.*` or `custom.*`:** Extensions of the community. This allows industries (e.g., aerospace, medicine) to create their own feature dictionaries.
+To eliminate hallucinations and ensure reliability, the specification separates probabilistic thinking from deterministic rules. This is the relationship between a **Person (The Engine)** and the **Rules (The Governance)**.
 
-## 7. Licensing
-The protocol and its reference implementations are distributed under the **Apache License 2.0** to ensure adoption by tech giants and independent developers alike.
+### 3.1 The Intelligence Layer (The Reasoning Engine)
 
-## 8. Acknowledgments & Authorship
-This protocol is proposed and maintained by **[Danilo Borges](https://github.com/daniloborges)**.
+Like a human, this layer provides creative synthesis and understanding. It is powerful but requires guidance to remain accurate.
 
-The `.agent` protocol stands on the shoulders of existing standards and community efforts. We would like to acknowledge:
-* **[Career-Ops](https://github.com/santifer/career-ops):** For the fundamental inspiration regarding operational efficiency and AI agent workflows.
-* **[AgentSkills](https://github.com/open-agents/agentskills):** For providing a clear framework for skill-based agent decomposition.
-* **[JSON-LD](https://json-ld.org/):** For the semantic structure and linked-data principles that guide our metadata.
-* **[Matter (CSA)](https://csa-iot.org/all-solutions/matter/):** For the cluster-based approach to hardware interoperability and universal connectivity.
+### 3.2 The Governance Layer (The Deterministic Guardrails)
 
----
+This layer manages the agent's state and lifecycle. It dictates which prompts are dispatched and which system scripts (like cp, sed, or file templates) are executed. It manifests in two ways:
 
-## Current Status: Phase 1 (Draft)
-**Current Stage:** Concept Development & Community Feedback.
+* **Declarative Blueprint (.flow):** A human-readable **Pseudocode** (YAML/JSON). It allows users to build and audit sophisticated agents through transparent instructions.  
+* **Optimized Execution (.logic):** A binary layer (Wasm). Designed for enterprise-scale operations requiring high performance, IP protection, or strict regulatory compliance.
 
-We are currently:
-- [ ] Collecting feedback on the `.agent` conceptual structure.
-- [ ] Defining the minimum viable protocol (MVP).
-- [ ] Drafting the initial `manifest.json` schema.
-- [ ] Building the first reference "Agent Engine" harness.
+## 4. Operational Mechanics
 
-**Join the Conversation:** We are looking for developers, AI researchers, and hardware manufacturers to help refine this standard. Feel free to open an issue or start a discussion.
+### 4.1 The Capability Contract (Consume, Do, Output)
+
+The specification utilizes the **Jobs To Be Done (JTBD)** methodology to ensure that every agent follows an "Operational Triad" for interoperability:
+
+1. **Consume:** What data does the agent need? (e.g., Calendar access).  
+2. **Do:** What actions are required? (e.g., OCR, math, or route calculation).  
+3. **Output:** What is the result? (e.g., A rendered HTML UI or a system signal).
+
+### 4.2 Runtime Self-Awareness (Effort Scoring)
+
+The specification uses **Effort Scoring** to allow the local Engine to manage resources autonomously:
+
+* **Low Effort:** Routed to local SLMs (e.g., Gemini Nano) for zero cost and maximum privacy.  
+* **Medium Effort:** Balanced between high-end local models and mid-tier cloud services.  
+* **High Effort:** Routed to frontier models (e.g., GPT-4o, Gemini Pro) for specialized, complex reasoning.
+
+### 4.3 Universal Portability
+
+The specification acts as a **Universal Adapter**. A single .agent package can be mapped automatically to vendor-specific interfaces like Apple App Intents, Gemini Extensions, or Azure AI Agents without code changes.
+
+## 5. Security & Architecture
+
+* **Zero-Trust Sandboxing:** All logic executes in secure, isolated environments (WASI-compliant).  
+* **Permission Mediation:** No access to host resources is granted unless explicitly declared in the "Consume" contract and approved by the user.  
+* **Adaptive Loading:** The Engine loads only the necessary components for the current task, maintaining a low memory footprint on edge devices.  
+* **Namespace Ecosystem:** Uses std.\* for core primitives and ext.\* for community/industry extensions (e.g., medical or aerospace).
+
+## 6. Practical Applications & Economic Models
+
+### 6.1 Peer-to-Peer (Social)
+
+* **Example:** A shared "Perfect Pizza" agent (pizza.agent) —sourced from a friend, a culinary influencer, a professional chef, or the pizza brand itself—that configures a smart oven automatically to achieve restaurant-grade results.  
+* **Model:** Viral sharing or micro-transactions for lifestyle creators.
+
+### 6.2 Media & Engagement
+
+* **Example:** A Viking-themed brand agent. Upon receiving a user's photo, the agent locally generates a personalized Viking warrior avatar. It transforms text messages into a stylized "Norse" dialect and generates stylized audio for social sharing (e.g., converting a simple "Hi, I'm ready" into a booming "SKÀL\! I stand ready for the raid, brother\!").  
+* **Model:** Brand loyalty marketing or freemium services.
+
+### 6.3 Cross-System Orchestration (The Interop Journey)
+
+* **Example:** A user issues a voice command on their **Mobile Phone** to prepare for a trip. The agent orchestrates a multi-stage workflow: it triggers the **Smart Vehicle** agent to leave the garage, calls a **Banking Agent** to authorize a parking payment (interfacing with a **Legacy COBOL** system for clearance), and confirms the mission success. By having organized "Do" contracts, these diverse agents collaborate natively without manual integration.  
+* **Model:** Enterprise Licensing, infrastructure-as-a-service, or per-transaction orchestration fees.
+
+### 6.4 Scalable Professional Expertise (The 1:N Model)
+
+* **Example:** A traditional (non-IT) law firm creates a single **Modular Contract Validation Agent**. This one-to-many (1:N) asset is deployed across entirely different sectors: it audits loan agreements in **Finance**, audits safety compliance agreements in **Chemical Manufacturing**, and audits procurement agreements in **Aerospace**. The firm scales its core legal expertise as a digital product, allowing disparate industries to "plug in" high-level legal oversight without the firm needing to build custom software for every client.  
+* **Model:** High-value B2B service contracts or subscription-based modular expert systems.
+
+## 7. Governance & Roadmap
+
+The .agent specification is a community-driven initiative released under the **Apache License 2.0**.
+
+### Acknowledgments
+
+Proposed by [Danilo Borges](https://github.com/daniloborges), inspired by foundational work from [Career-Ops](https://github.com/santifer/career-ops), [AgentSkills](https://agentskills.io/), [LangGraph](https://langchain-ai.github.io/langgraph/), [AutoGen](https://microsoft.github.io/autogen/), [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), [Matter (CSA)](https://csa-iot.org/all-solutions/matter/), [Wasmtime](https://wasmtime.dev/), [Docker](https://www.docker.com/), and [Kubernetes](https://kubernetes.io/).
+
+### The Path Forward
+
+- [x] **Specification Philosophy & Vision** 
+- [ ] **Minimum Specification Structure** 
+- [ ] **Community Feedback** 
+- [ ] **PoC Release:** Launching a reference Agent Engine.  
+- [ ] **Official RFC:** Formal submission for industry review.  
+- [ ] **Community Donation:** Transitioning to an open-source foundation for neutral governance.
