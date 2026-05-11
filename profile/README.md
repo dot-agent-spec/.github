@@ -70,12 +70,12 @@ The specification acts as a **Universal Adapter**. A single .agent package can b
 
 ### 6.1 Peer-to-Peer (Social)
 
-* **Example:** A shared "Perfect Pizza" agent (pizza.agent) —sourced from a friend, a culinary influencer, a professional chef, or the pizza brand itself—that configures a smart oven automatically to achieve restaurant-grade results.  
+* **Example:** A shared "Perfect Pizza" agent (`pizza.agent`) sourced from a friend, a culinary influencer, a professional chef, or the pizza brand itself—that configures a smart oven automatically to achieve restaurant-grade results.  
 * **Model:** Viral sharing or micro-transactions for lifestyle creators.
 
 ### 6.2 Media & Engagement
 
-* **Example:** A Viking-themed brand agent. Upon receiving a user's photo, the agent locally generates a personalized Viking warrior avatar. It transforms text messages into a stylized "Norse" dialect and generates stylized audio for social sharing (e.g., converting a simple "Hi, I'm ready" into a booming "SKÀL\! I stand ready for the raid, brother\!").  
+* **Example:** A Viking-themed brand agent (`viking.agent`). Upon receiving a user's photo, the agent locally generates a personalized Viking warrior avatar. It transforms text messages into a stylized "Norse" dialect and generates stylized audio for social sharing (e.g., converting a simple "Hi, I'm ready" into a booming "SKÀL\! I stand ready for the raid, brother\!").  
 * **Model:** Brand loyalty marketing or freemium services.
 
 ### 6.3 Cross-System Orchestration (The Interop Journey)
