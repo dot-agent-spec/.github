@@ -20,21 +20,33 @@
 
 This document provides a technical deep-dive into the underlying architecture of the `.agent` Specification. It focuses on the conceptual framework for deterministic execution, cross-platform portability, and secure orchestration, acknowledging that specific file formats and low-level standards are currently under refinement.
 
-## 2. Package Anatomy (Conceptual)
+## 2. Package Anatomy
 
-An .agent package is envisioned as a portable, self-contained container. The structure is designed to decouple user intent from execution logic, allowing for modular updates and audits.
+An .agent package is a portable, self-contained container. The structure decouples user intent from execution logic, allowing for modular updates and audits.
 
-### 2.1 Proposed Components
+### 2.1 Core Files
 
-* **Manifest:** Contains global metadata, versioning, permission requests, and the Capability Contract.  
-* **The Governance Layer:**  
-  * **Blueprints (.flow):** Human-readable orchestration scripts (Pseudocode or DSL).  
-  * **Logic Units (.logic):** Compiled modules (Intermediate Language) for high-performance logic.  
-* **Knowledge & Personality:**  
-  * **Persona DSL/.md:** Definitions for agent behavior and identity.  
-  * **Knowledge Base:** Indexed fragments for domain expertise.  
+Every agent is defined by two files:
+
+* **`agent.description`** — the manifest: identity, capabilities, type declarations, and the Capability Contract (Consume / Do / Output).  
+* **`agent.behavior`** — the behavior: state machine, LLM orchestration, and tool calls written in a human-readable DSL.
+
+### 2.2 Supporting Components
+
+* **Knowledge & Persona:** Indexed domain fragments and identity definitions loaded at runtime.  
 * **Assets:** Static context templates, prompt fragments, and localized resources.  
-* **Security & State:** Digital signatures and placeholders for encrypted state snapshots.
+* **Security & State:** Digital signatures and encrypted state snapshots for resumable sessions.
+
+### 2.3 Toolchain Packages
+
+| Package | Role |
+|---|---|
+| `@dot-agent/tree-sitter` | WASM grammar — canonical syntax source |
+| `@dot-agent/parser-dsl` | Rust/WASM parser for `.behavior` and `.description` |
+| `@dot-agent/kernel-dsl` | Rust/WASM FSM execution engine |
+| `@dot-agent/compiler` | Linter, semantic validation, ZIP packaging |
+| `@dot-agent/sdk` | Browser-compatible dispatch layer |
+| `@dot-agent/language-server` | LSP server for IDE support |
 
 ## 3. The Governance Layer: Orchestration & Interop
 
@@ -42,8 +54,8 @@ The Governance Layer acts as the agent's "prefrontal cortex," providing determin
 
 ### 3.1 Representation Formats
 The governance of an agent is defined through two complementary formats:
-* **The .flow Component (Declarative):** A human-readable DSL (YAML/JSON) or Pseudocode. It empowers non-technical creators to audit and build complex agents via a transparent decision tree, allowing the Engine to perform security checks prior to execution.  
-* **The .logic Component (Binary):** Compiled into an **Intermediate Language (IL)** such as **Wasm**. It handles complex prioritization, high-performance math, or sensitive compliance logic that must remain deterministic and opaque for IP protection.
+* **`agent.behavior` (Declarative DSL):** A human-readable language with states, handlers, and LLM directives. It empowers non-technical creators to audit and build complex agents via a transparent state machine, allowing the Engine to perform security checks prior to execution.  
+* **WASM component (Binary):** Compiled into **WebAssembly**. It handles complex prioritization, high-performance math, or sensitive compliance logic that must remain deterministic and opaque for IP protection.
 
 ### 3.2 Transpilation & Framework Mapping
 
@@ -88,6 +100,6 @@ The specification distinguishes between **carried artifacts** (Persona/Knowledge
 
 ## 6. Development & Distribution
 
-* **Authoring:** Using AI-assisted generators (Gemini, Claude) or visual platforms (**n8n**).  
-* **Compiling:** Developers target the specification's IL for the .logic component.  
-* **Distribution:** Direct sharing via Instant Messaging (as .agent files) or vendor marketplaces.
+* **Authoring:** Writing `agent.description` and `agent.behavior` files directly, with IDE support via `@dot-agent/language-server` (LSP), or using AI-assisted generators.  
+* **Compiling:** `@dot-agent/compiler` lints, validates semantics, and packages the agent into a distributable ZIP. The WASM component targets the specification's binary format for high-performance logic.  
+* **Distribution:** Direct sharing via Instant Messaging (as `.agent` files) or vendor marketplaces.

@@ -48,10 +48,10 @@ Like a human, this layer provides creative synthesis and understanding. It is po
 
 ### 3.2 The Governance Layer (The Deterministic Guardrails)
 
-This layer manages the agent's state and lifecycle. It dictates which prompts are dispatched and which system scripts (like cp, sed, or file templates) are executed. It manifests in two ways:
+This layer manages the agent's state and lifecycle. It dictates which prompts are dispatched and which system scripts are executed. It manifests in two ways:
 
-* **Declarative Blueprint (.flow):** A human-readable **Pseudocode** (YAML/JSON). It allows users to build and audit sophisticated agents through transparent instructions.  
-* **Optimized Execution (.logic):** A binary layer (Wasm). Designed for enterprise-scale operations requiring high performance, IP protection, or strict regulatory compliance.
+* **Declarative Behavior (`agent.behavior`):** A human-readable DSL defining states, LLM orchestration, and tool calls. It allows users to build and audit sophisticated agents through transparent, deterministic instructions.  
+* **Optimized Execution (WASM component):** A compiled binary layer for logic that exceeds the declarative scope of `agent.behavior`: loops, complex data aggregations, transactional rollback, high-performance computation, and operations requiring IP protection or strict regulatory compliance — from individual developer modules to enterprise-scale deployments.
 
 ## 4. Operational Mechanics
 
@@ -59,13 +59,13 @@ This layer manages the agent's state and lifecycle. It dictates which prompts ar
 
 The specification utilizes the **Jobs To Be Done (JTBD)** methodology to ensure that every agent follows an "Operational Triad" for interoperability:
 
-1. **Consume:** What data does the agent need? (e.g., Calendar access).  
-2. **Do:** What actions are required? (e.g., OCR, math, or route calculation).  
-3. **Output:** What is the result? (e.g., A rendered HTML UI or a system signal).
+1. **Consume:** What data must be in context before the agent starts? (e.g., a Calendar entry, a user profile). The Runtime resolves and validates these dependencies before execution begins.  
+2. **Do:** What actions may the agent execute? (e.g., OCR, math, or route calculation). Declared upfront as a sandboxing contract — the Runtime enforces this list against what the agent actually runs.  
+3. **Output:** What is the typed result? (e.g., A rendered HTML UI, a system signal, or a structured data object passed to the next agent in the chain).
 
 ### 4.2 Runtime Self-Awareness (Effort Scoring)
 
-The specification uses **Effort Scoring** to allow the local Engine to manage resources autonomously:
+On the roadmap, the specification introduces **Effort Scoring** — a mechanism for the local Engine to manage model routing autonomously, currently under active development as part of the PoC:
 
 * **Low Effort:** Routed to local SLMs (e.g., Gemini Nano) for zero cost and maximum privacy.  
 * **Medium Effort:** Balanced between high-end local models and mid-tier cloud services.  
@@ -73,12 +73,12 @@ The specification uses **Effort Scoring** to allow the local Engine to manage re
 
 ### 4.3 Universal Portability
 
-The specification acts as a **Universal Adapter**. A single .agent package can be mapped automatically to vendor-specific interfaces like Apple App Intents, Gemini Extensions, or Azure AI Agents without code changes.
+The specification is designed to act as a **Universal Adapter**. A single `.agent` package is intended to map to vendor-specific interfaces — Apple App Intents, Gemini Extensions, Azure AI Agents — without code changes. Transpilation adapters are part of the roadmap.
 
 ## 5. Security & Architecture
 
 * **Zero-Trust Sandboxing:** All logic executes in secure, isolated environments (WASI-compliant).  
-* **Permission Mediation:** No access to host resources is granted unless explicitly declared in the "Consume" contract and approved by the user.  
+* **Permission Mediation:** No access to host resources is granted unless explicitly declared in the agent's capability and dependency contracts and approved by the user.  
 * **Adaptive Loading:** The Engine loads only the necessary components for the current task, maintaining a low memory footprint on edge devices.  
 * **Namespace Ecosystem:** Uses std.\* for core primitives and ext.\* for community/industry extensions (e.g., medical or aerospace).
 
@@ -96,7 +96,7 @@ The specification acts as a **Universal Adapter**. A single .agent package can b
 
 ### 6.3 Cross-System Orchestration (The Interop Journey)
 
-* **Example:** A user issues a voice command on their **Mobile Phone** to prepare for a trip. The agent orchestrates a multi-stage workflow: it triggers the **Smart Vehicle** agent to leave the garage, calls a **Banking Agent** to authorize a parking payment (interfacing with a **Legacy COBOL** system for clearance), and confirms the mission success. By having organized "Do" contracts, these diverse agents collaborate natively without manual integration.  
+* **Example:** A user issues a voice command on their **Mobile Phone** to prepare for a trip. The agent orchestrates a multi-stage workflow: it triggers the **Smart Vehicle** agent to leave the garage, calls a **Banking Agent** to authorize a parking payment (interfacing with a **Legacy COBOL** system for clearance), and confirms the mission success. By having explicit capability and dependency contracts, these diverse agents collaborate natively without manual integration.  
 * **Model:** Enterprise Licensing, infrastructure-as-a-service, or per-transaction orchestration fees.
 
 ### 6.4 Scalable Professional Expertise (The 1:N Model)
@@ -115,8 +115,8 @@ Proposed by [Danilo Borges](https://github.com/daniloborges), inspired by founda
 ### The Path Forward
 
 - [x] **Specification Philosophy & Vision** 
-- [ ] **Minimum Specification Structure** 
-- [ ] **Community Feedback** 
+- [x] **Minimum Specification Structure** — DSL (`agent.behavior` + `agent.description`), parser, compiler, kernel, SDK, and LSP packages are defined and published.
 - [ ] **PoC Release:** Launching a reference Agent Engine.  
+- [ ] **Community Feedback** 
 - [ ] **Official RFC:** Formal submission for industry review.  
 - [ ] **Community Donation:** Transitioning to an open-source foundation for neutral governance.
