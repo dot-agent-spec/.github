@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Idea or design discussion
+    url: https://github.com/orgs/dot-agent-spec/discussions
+    about: Not a concrete proposal yet? Start a Discussion. Formal feature design goes through the RFC process (see GOVERNANCE.md in the spec repo).
+  - name: 🔒 Security vulnerability
+    url: https://github.com/dot-agent-spec/.github/blob/main/SECURITY.md
+    about: Please report security issues privately — do not open a public issue.
